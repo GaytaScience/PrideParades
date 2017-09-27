@@ -2,7 +2,8 @@
 # Pride Parade Company Call Outs
 # Kelsey Campbell - 7/15/2017
 # 
-# Identify long or consistently supportive companies from Pride Parade data
+# Summarize company participation in Pride parades
+# Identify consistently supportive companies 
 #------------------------------------------------------------------------
 
 setwd("C:/Users/Kelsey/Desktop/PrideParades/data")
