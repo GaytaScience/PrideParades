@@ -71,15 +71,4 @@ groupcnts <- summarise(group_by(lncompanies,Group),count =n())
 
 groupcnts[which(groupcnts$count == 7), ]
 
-# One and Done Companies (Large National Only)
-#-------------------------------------------
-
-# Remove 2017 (1st timer in 2017 might come back)
-lncompanies_pre17 <- df[ which(df$Category =='Large National Company' & df$Year != 2017), ]
-
-groupcnts_pre17 <- summarise(group_by(lncompanies_pre17,Group),count =n())
-
-save <- groupcnts_pre17[which(groupcnts_pre17$count == 1), ]
-
-
 
