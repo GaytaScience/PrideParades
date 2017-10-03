@@ -1,0 +1,201 @@
+<!-- Example from http://bl.ocks.org/jonahwilliams/2f16643b999ada7b1909 -->
+<!-- Tooltips - http://bl.ocks.org/Caged/6476579 -->
+<!-- Responsive with Bootstrap - https://leanpub.com/D3-Tips-and-Tricks/read#leanpub-auto-using-bootstrap-with-d3js -->
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+	<script src="https://code.jquery.com/jquery.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"> -->
+<style>
+
+.rectangle {
+	fill: steelblue;
+}
+.rectangle:hover {
+	fill: orange;
+}
+.axis {
+  font: 16px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+
+ .d3-tip.n:after {
+		margin: -1px 0 0 0;
+		top: 100%;
+		left: 0;
+	}
+
+}
+</style>
+</head>
+<body>
+<!-- <div class = "row" id="drop" align=center> Select a Thing </div> -->
+<div class = "row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "drop" align=center>Select a Thing </div>
+</div>
+<!-- <div class = "row" id = "chart" align=center></div> -->
+<div class = "row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "chart" align=center></div>
+</div>
+
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="https://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+<script>
+
+var margin = {top: 80, right: 30, bottom: 80, left: 50},
+    width = 960 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom;
+
+var svg = d3.select("#chart").append("svg")
+	//.attr("width", width + margin.left + margin.right)
+  //.attr("height", height + margin.top + margin.bottom)
+	.attr("preserveAspectRatio", "xMinYMin meet")
+	.attr("viewBox", "0 0 960 600")
+	//.classed("svg-content", true)
+	.append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+//d3.tsv("data/VotingInformation.tsv", function(error, data){
+//d3.csv("data/bartest.csv", function(error, data){
+d3.csv("https://www.gaytascience.com/wp-content/uploads/2017/09/bartest.csv", function(error, data){
+	
+
+	// filter year, save Weighted Avg Seperately
+	var wavg = data.filter(function(d){return d.Year == 'All';});
+	var data = data.filter(function(d){return d.Year != 'All';});
+
+	// Get every column value
+	console.log(data[0]);
+	var elements = Object.keys(data[0])
+		.filter(function(d){
+			return (d != "Year");
+		});
+	var selection = elements[0];
+	console.log(selection);
+
+	var y = d3.scale.linear()
+			// .domain([0, d3.max(data, function(d){
+			// 	return +d[selection];
+			// })])
+			.domain([0, 1])
+			.range([height, 0]);
+
+	var x = d3.scale.ordinal()
+			.domain(data.map(function(d){ return d.Year;}))
+			.rangeBands([0, width]);
+
+	var xAxis = d3.svg.axis()
+		.scale(x)
+	  .orient("bottom");
+
+	var formatPercent = d3.format(".0%");
+	var formatPercent_tt = d3.format(".1%");
+
+	var yAxis = d3.svg.axis()
+		.scale(y)
+	  .orient("left")
+		.tickFormat(formatPercent);
+
+	svg.append("g")
+    	.attr("class", "x axis")
+    	.attr("transform", "translate(0," + height + ")")
+    	.call(xAxis);
+
+ 	svg.append("g")
+    	.attr("class", "y axis")
+    	.call(yAxis);
+
+	var tip = d3.tip()
+	    .attr('class', 'd3-tip')
+	    .offset([-10, 0])
+	    .html(function(d) {
+				if (d[selection.value] == undefined) {
+	    		return "<span class='tooltip-line'>" + formatPercent_tt(d[selection]) + "</span>";
+				}
+				else {
+					return "<span class='tooltip-line'>" + formatPercent_tt(d[selection.value]) + "</span>";
+				}
+	    });
+
+	// tooltip
+	svg.call(tip);
+
+	// Text Takeaway
+	var wavgText = svg.append('text')
+	    .data(wavg)
+	    .attr('x', 10)
+	    .attr('y', 90)
+	    .attr('fill', '#000')
+			.attr("font-size", "50px")
+	    .text(function(d) { return "On Average, " + formatPercent_tt(d[selection]) + " of the Thing Happens." })
+
+	svg.selectAll("rectangle")
+		.data(data)
+		.enter()
+		.append("rect")
+		.attr("class","rectangle")
+		.attr("width", width/data.length - 5)
+		.attr("height", function(d){
+			return height - y(+d[selection]);
+		})
+		.attr("x", function(d, i){
+			return (width / data.length) * i ;
+		})
+		.attr("y", function(d){
+			return y(+d[selection]);
+		})
+		.on('mouseover', tip.show)
+		.on('mouseout', tip.hide);
+
+	var selector = d3.select("#drop")
+    	.append("select")
+    	.attr("id","dropdown")
+    	.on("change", function(d){
+        	selection = document.getElementById("dropdown");
+
+			// Update Takeaway Text
+			wavgText.data(wavg)
+				.transition()
+				.text(function(d) { return "On Average, " + formatPercent_tt(d[selection.value]) + " of the Thing Happens." })
+			yAxis.scale(y);
+
+        	d3.selectAll(".rectangle")
+           		.transition()
+	            .attr("height", function(d){
+					return height - y(+d[selection.value]);
+				})
+				.attr("x", function(d, i){
+					return (width / data.length) * i ;
+				})
+				.attr("y", function(d){
+					return y(+d[selection.value]);
+				})
+           		.ease("linear")
+
+           	d3.selectAll("g.y.axis")
+           		.transition()
+           		.call(yAxis);
+
+         });
+
+    selector.selectAll("option")
+      .data(elements)
+      .enter().append("option")
+      .attr("value", function(d){
+        return d;
+      })
+      .text(function(d){
+        return d;
+      })
+
+});
+
+</script>
+</body>
