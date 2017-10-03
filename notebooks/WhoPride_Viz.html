@@ -11,10 +11,10 @@
 <style>
 
 .rectangle {
-	fill: steelblue;
+	fill: #5189c1;
 }
 .rectangle:hover {
-	fill: orange;
+	fill: #f90f50;
 }
 .axis {
   font: 16px sans-serif;
@@ -36,11 +36,9 @@
 </style>
 </head>
 <body>
-<!-- <div class = "row" id="drop" align=center> Select a Thing </div> -->
 <div class = "row">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "drop" align=center>Select a Thing </div>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "drop" align=center>I am </div>
 </div>
-<!-- <div class = "row" id = "chart" align=center></div> -->
 <div class = "row">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "chart" align=center></div>
 </div>
@@ -54,19 +52,15 @@ var margin = {top: 80, right: 30, bottom: 80, left: 50},
     height = 600 - margin.top - margin.bottom;
 
 var svg = d3.select("#chart").append("svg")
-	//.attr("width", width + margin.left + margin.right)
-  //.attr("height", height + margin.top + margin.bottom)
 	.attr("preserveAspectRatio", "xMinYMin meet")
 	.attr("viewBox", "0 0 960 600")
-	//.classed("svg-content", true)
 	.append("g")
-  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 //d3.tsv("data/VotingInformation.tsv", function(error, data){
 //d3.csv("data/bartest.csv", function(error, data){
-d3.csv("https://www.gaytascience.com/wp-content/uploads/2017/09/bartest.csv", function(error, data){
+d3.csv("https://www.gaytascience.com/wp-content/uploads/2017/10/whopride_vizdata.csv", function(error, data){
 	
-
 	// filter year, save Weighted Avg Seperately
 	var wavg = data.filter(function(d){return d.Year == 'All';});
 	var data = data.filter(function(d){return d.Year != 'All';});
@@ -81,26 +75,26 @@ d3.csv("https://www.gaytascience.com/wp-content/uploads/2017/09/bartest.csv", fu
 	console.log(selection);
 
 	var y = d3.scale.linear()
-			// .domain([0, d3.max(data, function(d){
-			// 	return +d[selection];
-			// })])
-			.domain([0, 1])
-			.range([height, 0]);
+		// .domain([0, d3.max(data, function(d){
+		// 	return +d[selection];
+		// })])
+		.domain([0, 1])
+		.range([height, 0]);
 
 	var x = d3.scale.ordinal()
-			.domain(data.map(function(d){ return d.Year;}))
-			.rangeBands([0, width]);
+		.domain(data.map(function(d){ return d.Year;}))
+		.rangeBands([0, width]);
 
 	var xAxis = d3.svg.axis()
 		.scale(x)
-	  .orient("bottom");
+	    .orient("bottom");
 
 	var formatPercent = d3.format(".0%");
 	var formatPercent_tt = d3.format(".1%");
 
 	var yAxis = d3.svg.axis()
 		.scale(y)
-	  .orient("left")
+	    .orient("left")
 		.tickFormat(formatPercent);
 
 	svg.append("g")
@@ -117,7 +111,7 @@ d3.csv("https://www.gaytascience.com/wp-content/uploads/2017/09/bartest.csv", fu
 	    .offset([-10, 0])
 	    .html(function(d) {
 				if (d[selection.value] == undefined) {
-	    		return "<span class='tooltip-line'>" + formatPercent_tt(d[selection]) + "</span>";
+	    			return "<span class='tooltip-line'>" + formatPercent_tt(d[selection]) + "</span>";
 				}
 				else {
 					return "<span class='tooltip-line'>" + formatPercent_tt(d[selection.value]) + "</span>";
@@ -130,11 +124,11 @@ d3.csv("https://www.gaytascience.com/wp-content/uploads/2017/09/bartest.csv", fu
 	// Text Takeaway
 	var wavgText = svg.append('text')
 	    .data(wavg)
-	    .attr('x', 10)
+	    .attr('x', 25)
 	    .attr('y', 90)
 	    .attr('fill', '#000')
-			.attr("font-size", "50px")
-	    .text(function(d) { return "On Average, " + formatPercent_tt(d[selection]) + " of the Thing Happens." })
+		.attr("font-size", "50px")
+	    .text(function(d) { return "On Average, " + formatPercent_tt(d[selection]) + " of Pride is for you." })
 
 	svg.selectAll("rectangle")
 		.data(data)
@@ -163,7 +157,7 @@ d3.csv("https://www.gaytascience.com/wp-content/uploads/2017/09/bartest.csv", fu
 			// Update Takeaway Text
 			wavgText.data(wavg)
 				.transition()
-				.text(function(d) { return "On Average, " + formatPercent_tt(d[selection.value]) + " of the Thing Happens." })
+				.text(function(d) { return "On Average, " + formatPercent_tt(d[selection.value]) + " of Pride is for you." })
 			yAxis.scale(y);
 
         	d3.selectAll(".rectangle")
