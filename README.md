@@ -22,3 +22,4 @@ I don't feel comfortable making public the raw files, my labeled dataset contain
 ### Notebooks:
 Contains exploratory analysis and graphic generation code used in the posts below. 
 * **Pride is Less Fun:** https://www.gaytascience.com/pride-less-fun/
+* **Company Call Outs:** https://www.gaytascience.com/company-call-outs/
