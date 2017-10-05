@@ -23,3 +23,4 @@ I don't feel comfortable making public the raw files, my labeled dataset contain
 Contains exploratory analysis and graphic generation code used in the posts below. 
 * **Pride is Less Fun:** https://www.gaytascience.com/pride-less-fun/
 * **Company Call Outs:** https://www.gaytascience.com/company-call-outs/
+* **How Much of Pride is for Me?** https://www.gaytascience.com/how-much-pride-for-me/
