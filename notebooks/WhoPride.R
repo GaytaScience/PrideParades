@@ -53,6 +53,23 @@ ggplot(any_pct, aes(x = Year, y = count, fill = Focus)) +
 
 ggsave('AnyLGBTSplit.png', width = 9, height = 6, dpi = 200)
 
+# What are the "None" Entries?
+#-------------------------------------------
+
+# Subset
+nones <- df[ which(df$None == 1), ]
+
+# Summarize
+nonesum <- nones %>% group_by(Category) %>%
+                     summarize(value = n())
+
+# Plot (All time, don't break out by year)
+g <- ggplot(nonesum, aes(x = reorder(Category, value), y = value)) +
+                         geom_bar(stat="identity", fill="#5189c1") +
+                         coord_flip() + ylab(NULL) + xlab(NULL)
+g
+
+ggsave('NoneCatas3.png', width = 4, height = 3, dpi = 200)
 
 # Data for D3 Viz
 #-------------------------------------------
