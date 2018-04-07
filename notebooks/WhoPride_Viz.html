@@ -60,6 +60,7 @@ var svg = d3.select("#chart").append("svg")
 //d3.tsv("data/VotingInformation.tsv", function(error, data){
 //d3.csv("data/bartest.csv", function(error, data){
 d3.csv("https://www.gaytascience.com/wp-content/uploads/2017/10/whopride_vizdata.csv", function(error, data){
+//d3.csv("../data/whopride_vizdata.csv", function(error, data){
 	
 	// filter year, save Weighted Avg Seperately
 	var wavg = data.filter(function(d){return d.Year == 'All';});
@@ -109,6 +110,7 @@ d3.csv("https://www.gaytascience.com/wp-content/uploads/2017/10/whopride_vizdata
 	var tip = d3.tip()
 	    .attr('class', 'd3-tip')
 	    .offset([-10, 0])
+	    .style('z-index', '999999999')
 	    .html(function(d) {
 				if (d[selection.value] == undefined) {
 	    			return "<span class='tooltip-line'>" + formatPercent_tt(d[selection]) + "</span>";
