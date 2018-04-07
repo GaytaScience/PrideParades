@@ -109,6 +109,7 @@ d3.csv("https://www.gaytascience.com/wp-content/uploads/2017/10/whopride_vizdata
 	var tip = d3.tip()
 	    .attr('class', 'd3-tip')
 	    .offset([-10, 0])
+	    .style('z-index', '999999999')
 	    .html(function(d) {
 				if (d[selection.value] == undefined) {
 	    			return "<span class='tooltip-line'>" + formatPercent_tt(d[selection]) + "</span>";
