@@ -1,6 +1,7 @@
 #------------------------------------------------------------------------
 # Pride Parades - Who is Pride For?
 # Kelsey Campbell - 7/22/2017
+#         Updated - 6/25/2018
 # 
 # Summarize prevalence of LGBTQ+ focused parade groups
 # Prepare data for interactive viz
@@ -46,12 +47,12 @@ any_pct<- anydata %>% group_by(Year) %>%
 ggplot(any_pct, aes(x = Year, y = count, fill = Focus)) +
   geom_bar(stat="identity") +
   geom_text(aes(label=paste0(sprintf("%1.1f", pct*100),"%")), 
-            position=position_stack(vjust=0.5)) + 
-  scale_x_continuous(breaks=(2011:2017)) +
-  scale_y_continuous(breaks = seq(0, 350, by = 50), name = "Number of Entries") +
-  scale_fill_manual(values=c("#f90f50","#5189c1"))
+            position=position_stack(vjust=0.5)) +
+  scale_x_continuous(breaks=(2011:2018)) +
+  scale_y_continuous(limits = c(0, 400), name = "Number of Entries",expand=c(0,0)) +
+  scale_fill_manual(values=c("#FE066B","#2C75BE"))
 
-ggsave('AnyLGBTSplit.png', width = 9, height = 6, dpi = 200)
+ggsave('AnyLGBTSplit2018.png', width = 9, height = 6, dpi = 200)
 
 # What are the "None" Entries?
 #-------------------------------------------
@@ -69,7 +70,7 @@ g <- ggplot(nonesum, aes(x = reorder(Category, value), y = value)) +
                          coord_flip() + ylab(NULL) + xlab(NULL)
 g
 
-ggsave('NoneCatas3.png', width = 4, height = 3, dpi = 200)
+ggsave('NoneCatas4.png', width = 4, height = 6, dpi = 200)
 
 # Data for D3 Viz
 #-------------------------------------------
